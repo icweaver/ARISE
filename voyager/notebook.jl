@@ -41,6 +41,11 @@ DataDep(
 ) |> register
 end
 
+# ╔═╡ 0a12f6ad-26b5-4d64-ab27-844385085e9b
+md"""
+_This notebook is modified from the [ARISE materials](https://agiseti.com/page14.html) prepared by J. Earwicker_
+"""
+
 # ╔═╡ ca1c0637-52c7-4168-9138-f5b91f9578dc
 md"""
 # 🛰️ Data Science in Radio Astronomy II - Detecting Voyager 1
@@ -331,15 +336,24 @@ end
 
 # ╔═╡ 78c6aebd-25b6-4890-bc6c-e8e4f63eef67
 let
-	p1 = scatter(x=freqs_zoomed/1e6, y=avg_power_spectrum_zoomed)
+	p1 = scatter(x=freqs_zoomed/1e6, y=avg_power_spectrum_zoomed;
+		name = "Spectrum ROI",
+	)
 
 	mask = pks.indices
 	p2 = scatter(x=freqs_zoomed[mask]/1e6, y=avg_power_spectrum_zoomed[mask];
 		mode = :markers,
 		marker = attr(symbol=:x),
+		name = "Detected Peaks",
+	)
+
+	layout = Layout(
+		xaxis = attr(title="Frequency (MHz)"),
+		yaxis = attr(title="Power (dB)"),
+		title = "Peak Detection on ROI",
 	)
 	
-	plot([p1, p2])
+	plot([p1, p2], layout)
 end
 
 # ╔═╡ 5e1590ab-e2b3-48aa-b2a8-9514b20e3dc7
@@ -387,20 +401,33 @@ md"""
 
 # ╔═╡ af6ddaff-6be3-44fa-bfc6-03e7ea1b4c32
 let
-	p1 = scatter(x=freqs_zoomed/1e6, y=avg_power_spectrum_zoomed)
+	p1 = scatter(x=freqs_zoomed/1e6, y=avg_power_spectrum_zoomed;
+		name = "Spectrum ROI",
+	)
 
-	fig = plot(p1)
+	
+	layout = Layout(
+		xaxis = attr(title="Frequency (MHz)"),
+		yaxis = attr(title="Power (dB)"),
+		title = "Quiet Regions for Noise Floor Estimation",
+	)
+
+	fig = plot(p1, layout)
 
 	add_vrect!(fig, extrema(quiet_1)...;
 		fillcolor=:gray,
 		line_width = 0.0,
 		opacity = 0.3,
+		showlegend = true,
+		name = "Quiet Region 1"
 	)
 
 	add_vrect!(fig, extrema(quiet_2)...;
 		fillcolor=:lightgray,
 		line_width = 0.0,
 		opacity = 0.3,
+		showlegend = true,
+		name = "Quiet Region 2",
 	)
 
 	fig
@@ -1016,6 +1043,7 @@ version = "17.4.0+2"
 """
 
 # ╔═╡ Cell order:
+# ╟─0a12f6ad-26b5-4d64-ab27-844385085e9b
 # ╟─ca1c0637-52c7-4168-9138-f5b91f9578dc
 # ╟─525b7253-59d6-4253-a61f-75db1b61dd34
 # ╟─542ae572-4506-41ef-afdf-e93a964e7f59
